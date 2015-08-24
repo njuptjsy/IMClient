@@ -1,54 +1,40 @@
 package com.njuptjsy.imclient;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import com.njuptjsy.imclient.view.AudioRecorderButton;
 import com.njuptjsy.imclient.view.AudioRecorderButton.AudioFinishRecorderListener;
+
 import android.app.Activity;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
-public class ChatFragment extends Fragment{
-	
+
+public class ChatActivity extends FragmentActivity {
+//	private static final int RESULT_CANCELED = 0;
+//	private static final int RESULT_OK = -1;
+//	private static final int RESULT_FIRST_USER = 1;用来作为setResult函数中的resultCode
+
 	private ListView mListView;
 	private ArrayAdapter<Recorder> mAdapter;
 	private List<Recorder> mDatas = new ArrayList<Recorder>();
 	private AudioRecorderButton mAudioRecorderButton;
-	private Activity mActivity;
-	private View mAnimView;
-
-	@Override
-	public void onAttach(Activity activity) {
-		Log.i("ChatFragment.onAttach", "now is in onAttach");
-		super.onAttach(activity);
-		mActivity = activity;
-	}
 	
-
+	private View mAnimView;
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-		Log.i("ChatFragment.onCreateView", "now is in onCreateView");
-		return inflater.inflate(R.layout.chat_layout, container, false);
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		Log.i("ChatFragment.onActivityCreated", "now is in onActivityCreated");
-		((MainActivity)mActivity).setChatView(getView());
-		super.onActivityCreated(savedInstanceState);
-		mListView = (ListView) mActivity.findViewById(R.id.id_listview);
-		mAudioRecorderButton = (AudioRecorderButton) mActivity.findViewById(R.id.id_record_button);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.chat_layout);
+		mListView = (ListView) findViewById(R.id.id_listview);
+		mAudioRecorderButton = (AudioRecorderButton) findViewById(R.id.id_record_button);
 		Log.i("ChatFragment.onCreare", (mAudioRecorderButton == null)+"");
 		mAudioRecorderButton.setAudioFinishRecorderListener(new AudioFinishRecorderListener() {
 
@@ -61,7 +47,7 @@ public class ChatFragment extends Fragment{
 			}
 		});
 
-		mAdapter = new RecorderAdapter(mActivity, mDatas);
+		mAdapter = new RecorderAdapter(this, mDatas);
 		mListView.setAdapter(mAdapter);
 
 		mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -87,9 +73,7 @@ public class ChatFragment extends Fragment{
 			}
 		});
 	}
-	
-	
-	
+
 	class Recorder{
 		float time;
 		String filePath;
@@ -116,6 +100,13 @@ public class ChatFragment extends Fragment{
 		}
 
 	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		//setResult(resultCode, data);
+		finish();
+	}
 
 	@Override
 	public void onDestroy() {
@@ -132,4 +123,5 @@ public class ChatFragment extends Fragment{
 		MediaManager.resume();
 		super.onResume();
 	}
+
 }

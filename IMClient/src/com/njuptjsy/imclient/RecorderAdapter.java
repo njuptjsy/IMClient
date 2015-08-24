@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import com.njuptjsy.imclient.ChatFragment.Recorder;
+import com.njuptjsy.imclient.ChatActivity.Recorder;
 
 import java.util.List;
 /**

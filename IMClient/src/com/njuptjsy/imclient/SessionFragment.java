@@ -3,7 +3,10 @@ package com.njuptjsy.imclient;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.njuptjsy.imclient.view.RefreshListView;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,15 +15,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 public class SessionFragment extends Fragment{
 	private Activity mActivity;
-	private ListView mListView;
+	private RefreshListView mListView;
 	private ArrayAdapter<SessionContext> mArrayAdapter;
 	private List<SessionContext> datas = new ArrayList<SessionContext>();
 	private String[] sessionNames = new String[]{"Miss Sun","刘德华","隔壁老王","小强","张学友","科比"};
 	private String[] lastMsgs = new String[]{"你好，是你吗？","忘情水来一杯","在家吗","我是凤凰","你认识刘德华吗？","凌晨四点见"};
+	private static final int CHATACTIVITY = 1;
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -35,7 +38,7 @@ public class SessionFragment extends Fragment{
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mListView = (ListView) mActivity.findViewById(R.id.id_session_lv);
+		mListView = (RefreshListView) mActivity.findViewById(R.id.id_session_lv);
 		initDatas();
 		mArrayAdapter = new SessionAdapter(mActivity, datas);
 		mListView.setAdapter(mArrayAdapter);
@@ -43,15 +46,23 @@ public class SessionFragment extends Fragment{
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-				ViewGroup viewGroup = (ViewGroup) SessionFragment.this.getView().getParent();
-				if (viewGroup != null) {
-					viewGroup.removeAllViews();
-				}
-				((MainActivity)mActivity).toChatFragmet(SessionFragment.this,position);
+//				ViewGroup viewGroup = (ViewGroup) SessionFragment.this.getView().getParent();
+//				if (viewGroup != null) {
+//					viewGroup.removeAllViews();
+//				}
+//				((MainActivity)mActivity).toChatFragmet(SessionFragment.this,position);
+				Intent intent = new Intent(mActivity.getApplicationContext(),ChatActivity.class);
+				startActivityForResult(intent,CHATACTIVITY);
 			}
 		});
 	}
-
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+	}
+	
 	private void initDatas() {
 		if (datas.isEmpty()) {
 			//int resId = mContext.getResources().getIdentifier("v"+level,"drawable",mContext.getPackageName());

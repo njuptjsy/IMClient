@@ -18,4 +18,5 @@
     <string name="session_name_test">会话名称</string>
     <string name="session_msg_test">这是本次会话最后一个消息</string>
     <string name="exit_progress">再按一次退出程序</string>
+    <string name="pull_refresh">下拉可以刷新</string>
 </resources>
