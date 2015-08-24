@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <stroke
+        android:width="1dp"
+        android:color="#eee" />
+<!--上面是阴影的边缘线条颜色和宽度，下面设置阴影的灰色的背景  -->
+    <solid android:color="#f7f7f7" />
+
+</shape>

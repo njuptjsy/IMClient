@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">IMClient</string>
+    <string name="action_search">查找</string>
+    <string name="action_add">添加</string>
+    <string name="menu_group_chat">发起群聊</string>
+    <string name="menu_feedback">意见反馈</string>
+    <string name="menu_addfriend">添加朋友</string>
+    <string name="menu_scan">扫一扫</string>
+    <string name="tab_contact">通讯录</string>
+    <string name="tab_found">发现</string>
+    <string name="tab_me">我</string>
+    <string name="cancel_send">手指上滑,取消发送</string>
+	<string name="str_recorder_normal">按住 说话</string>
+    <string name="str_recorder_recorder">松开 结束</string>
+    <string name="str_recorder_want_cancel">松开手指 取消发送</string>
+    <string name="session_name_test">会话名称</string>
+    <string name="session_msg_test">这是本次会话最后一个消息</string>
+    <string name="exit_progress">再按一次退出程序</string>
+</resources>
