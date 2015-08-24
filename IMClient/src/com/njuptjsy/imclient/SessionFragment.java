@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.njuptjsy.imclient.view.RefreshListView;
+import com.njuptjsy.imclient.view.RefreshListView.IReflashListener;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-
-public class SessionFragment extends Fragment{
+ 
+public class SessionFragment extends Fragment implements IReflashListener{
 	private Activity mActivity;
 	private RefreshListView mListView;
 	private ArrayAdapter<SessionContext> mArrayAdapter;
@@ -42,6 +44,7 @@ public class SessionFragment extends Fragment{
 		initDatas();
 		mArrayAdapter = new SessionAdapter(mActivity, datas);
 		mListView.setAdapter(mArrayAdapter);
+		mListView.setOnReflashListener(this);
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -72,6 +75,27 @@ public class SessionFragment extends Fragment{
 				datas.add(sessionContext);
 			}
 		}
+	}
+
+	@Override
+	public void onReflash() {
+		//TODO 获取最新数据 通知界面显示 刷新数据完毕
+		Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				reflashData();
+				mArrayAdapter.notifyDataSetChanged();
+				mListView.reflashComplete();
+			}
+		}, 2000);
+		
+	}
+
+	private void reflashData() {
+		SessionContext sessionContext = new SessionContext(mActivity.getResources().getIdentifier("icon","drawable",mActivity.getPackageName()),"Mr King","不一样的烟火");
+		datas.add(0,sessionContext);
 	}
 
 	
