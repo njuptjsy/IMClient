@@ -1,6 +1,5 @@
 package com.njuptjsy.imclient.view;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,8 +9,8 @@ import android.widget.TextView;
 import com.njuptjsy.imclient.R;
 
 /**
- * 用户管理Dialog
- * Created by zane on 15-4-30.
+ * 管理录音时界面中央显示的Dialog
+ * Author JSY.
  */
 public class DialogManager {
     private Dialog mDialog;
@@ -83,7 +82,7 @@ public class DialogManager {
     /**
      * 显示取消的对话框
      */
-    public void dimissDialog(){
+    public void dismissDialog(){
         if(mDialog != null && mDialog.isShowing()) { //显示状态
             mDialog.dismiss();
             mDialog = null;

@@ -1,9 +1,12 @@
 package com.njuptjsy.imclient;
-
+/**
+ * 封装每个会话的相关信息
+ * */
 public class SessionContext{
 	private int picResId;
 	private String sessionName;
 	private String lastMsg;
+	private int unReadMsg;
 	
 	public SessionContext(int picResId, String sessionName, String lastMsg) {
 		this.picResId = picResId;
@@ -33,6 +36,14 @@ public class SessionContext{
 
 	public void setLastMsg(String lastMsg) {
 		this.lastMsg = lastMsg;
+	}
+
+	public int getUnReadMsg() {
+		return unReadMsg;
+	}
+
+	public void setUnReadMsg(int unReadMsg) {
+		this.unReadMsg = unReadMsg;
 	}
 	
 	

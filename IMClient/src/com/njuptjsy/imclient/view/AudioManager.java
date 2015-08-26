@@ -1,6 +1,7 @@
 package com.njuptjsy.imclient.view;
 
 import android.media.MediaRecorder;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.util.UUID;
 
 /**
  * Author JSY.
+ * 播放录音
  */
 public class AudioManager {
     private MediaRecorder mMediaRecorder;
@@ -31,7 +33,7 @@ public class AudioManager {
         this.mDir = dir;
     }
 
-    public AudioStateListener mListener;
+    private AudioStateListener mListener;
 
     /**
      * 回调准备完毕
@@ -45,7 +47,8 @@ public class AudioManager {
     }
 
     /**
-     * 准备
+     * 录音前的准备
+     * 设置输出格式，录音源设备等
      */
     public void prepareAudio(){
 
@@ -66,7 +69,7 @@ public class AudioManager {
             //设置MediaRecorder的音频源为麦克风
             mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             //设置音频的格式
-            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
+            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
             //设置音频的编码为amr
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             //准备录音
@@ -79,6 +82,7 @@ public class AudioManager {
                 mListener.wellPrepared();
             }
         } catch (IOException e) {
+        	Log.e("AudioManager:prepareAudio", "something bad happend!");
             e.printStackTrace();
         }
     }
@@ -108,10 +112,10 @@ public class AudioManager {
     }
 
     /**
-     * 释放
+     * 停止录音并释放录音设备资源
      */
     public void release(){
-//        mMediaRecorder.stop();
+    	mMediaRecorder.stop();
         mMediaRecorder.release();
         mMediaRecorder = null;
     }

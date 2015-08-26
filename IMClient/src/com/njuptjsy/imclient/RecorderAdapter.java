@@ -13,11 +13,11 @@ import com.njuptjsy.imclient.ChatActivity.Recorder;
 import java.util.List;
 /**
  * Author JSY.
+ * 显示录音文件的ListView的Controller
  */
 public class RecorderAdapter extends ArrayAdapter<Recorder>{
 	private List<Recorder> mDatas;
 	private Context mContext;
-
 	private int mMinItemWidth;
 	private int mMaxItemWidth;
 	private LayoutInflater mInflater;
@@ -37,8 +37,6 @@ public class RecorderAdapter extends ArrayAdapter<Recorder>{
 
 		mInflater = LayoutInflater.from(mContext);
 	}
-
-
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

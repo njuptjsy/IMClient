@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import java.io.IOException;
 
 /**
+ * 播放录制的声音
  * author JSY.
  */
 public class MediaManager {

@@ -18,6 +18,10 @@ import android.util.TypedValue;
 import android.view.View;
 import com.njuptjsy.imclient.R;
 
+/**
+ * Author JSY
+ * 根据ViewPager的滑动距离实现颜色由浅到深变幻的底部图标
+ * */
 public class ChangeColorIconWithText extends View
 {
 
@@ -187,8 +191,8 @@ public class ChangeColorIconWithText extends View
 	protected Parcelable onSaveInstanceState()
 	{
 		Bundle bundle = new Bundle();
-		bundle.putParcelable(INSTANCE_STATUS, super.onSaveInstanceState());
-		bundle.putFloat(STATUS_ALPHA, mAlpha);
+		bundle.putParcelable(INSTANCE_STATUS, super.onSaveInstanceState());//存储原本的数据内容
+		bundle.putFloat(STATUS_ALPHA, mAlpha);//存储当前的alpha值
 		return bundle;
 	}
 

@@ -13,6 +13,7 @@ import android.widget.Button;
 import com.njuptjsy.imclient.R;
 
 /**
+ * 自定义的按下录音button
  * Author JSY
  */
 public class AudioRecorderButton extends Button implements AudioManager.AudioStateListener {
@@ -27,13 +28,14 @@ public class AudioRecorderButton extends Button implements AudioManager.AudioSta
 
 	private int mCurState = STATE_NORMAL; //当前的状态
 	//已经开始录音
-	private boolean isRecording = false; //是否已经开始录音
+	private volatile boolean isRecording = false; //是否已经开始录音
 	private DialogManager mDialogManger;
 	private AudioManager mAudioManger;
 
 	private float mTime;
 	//是否触发longClick方法
 	private boolean mReady;
+	private AudioFinishRecorderListener mListener;
 
 	public AudioRecorderButton(Context context) {
 		this(context, null);
@@ -61,7 +63,7 @@ public class AudioRecorderButton extends Button implements AudioManager.AudioSta
 		});
 	}
 
-	private AudioFinishRecorderListener mListener;
+
 	/**
 	 * 录音完成后的回调
 	 */
@@ -106,7 +108,7 @@ public class AudioRecorderButton extends Button implements AudioManager.AudioSta
 				mDialogManger.updateVoiceLevel(mAudioManger.getVoiceLevel(7));
 				break;
 			case MSG_DIALOG_DIMISS:
-				mDialogManger.dimissDialog();
+				mDialogManger.dismissDialog();
 				break;
 			}
 		}
@@ -143,7 +145,6 @@ public class AudioRecorderButton extends Button implements AudioManager.AudioSta
 				reset();
 				return super.onTouchEvent(event);
 			}
-
 			if(!isRecording || mTime < 0.9f) {
 				Log.i("AudioRecorderButton:onTouchEvent", "isRecording: "+ isRecording + "record time: " + mTime);
 				reset();
@@ -151,16 +152,16 @@ public class AudioRecorderButton extends Button implements AudioManager.AudioSta
 				mAudioManger.cancel();
 				handler.sendEmptyMessageDelayed(MSG_DIALOG_DIMISS,1300);
 			}else if(mCurState == STATE_RECORDING) { //正常录制的时候结束
-				mDialogManger.dimissDialog();
-			//release
-			mAudioManger.release();
-			//callbackToAct
-			if(mListener != null) {
-				mListener.onFinish(mTime,mAudioManger.getCurrentFilePath());
-			}
+				mDialogManger.dismissDialog();
+				//release
+				mAudioManger.release();
+				//callbackToAct
+				if(mListener != null) {
+					mListener.onFinish(mTime,mAudioManger.getCurrentFilePath());
+				}
 			}else if(mCurState == STATE_WANT_TO_CANCEL){
 				Log.i("AudioRecorderButton:onTouchEvent", "mCurState STATE_WANT_TO_CANCEL");
-				mDialogManger.dimissDialog();
+				mDialogManger.dismissDialog();
 				//cancel
 				mAudioManger.cancel();
 			}

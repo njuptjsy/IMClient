@@ -17,7 +17,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
- 
+
+/**
+ * 包裹了会话列表的Fragment
+ * */
 public class SessionFragment extends Fragment implements IReflashListener{
 	private Activity mActivity;
 	private RefreshListView mListView;
@@ -26,6 +29,7 @@ public class SessionFragment extends Fragment implements IReflashListener{
 	private String[] sessionNames = new String[]{"Miss Sun","刘德华","隔壁老王","小强","张学友","科比"};
 	private String[] lastMsgs = new String[]{"你好，是你吗？","忘情水来一杯","在家吗","我是凤凰","你认识刘德华吗？","凌晨四点见"};
 	private static final int CHATACTIVITY = 1;
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -75,6 +79,9 @@ public class SessionFragment extends Fragment implements IReflashListener{
 				datas.add(sessionContext);
 			}
 		}
+		datas.get(1).setUnReadMsg(3);
+		datas.get(3).setUnReadMsg(7);
+		datas.get(4).setUnReadMsg(4);;
 	}
 
 	@Override

@@ -77,24 +77,25 @@ public class RefreshListView extends ListView implements OnScrollListener{
 	}
 
 	/**
-	 * 通知父布局，自身所占高和宽
+	 * 结合父布局决定自身在真正绘图时所占的宽和高
+	 * 结合子视图的LayoutParams所给出的MeasureSpec信息来获取最合适的结果
 	 * */
 	private void measureView(View view){
-		//TODO !!!!!!!!!
-		ViewGroup.LayoutParams lp = view.getLayoutParams();//子视图向父视图告知自己的宽高
-		if (lp == null) {
+		ViewGroup.LayoutParams lp = view.getLayoutParams();//首先取到子布局的布局参数
+		if (lp == null) {//如果没有则新建，代码中设定
 			lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 		}
 		int width = ViewGroup.getChildMeasureSpec(0, 0, lp.width);//1.左右边距2.内边距3.子布局宽度
+		//结合从子视图的LayoutParams所给出的MeasureSpec信息来通过父布局获取最合适的结果宽或高
 		int height;
 		int tempHeight = lp.height;
-		if (tempHeight > 0) {
-			height = MeasureSpec.makeMeasureSpec(tempHeight, MeasureSpec.EXACTLY);//高度不为空填充次布局
+		if (tempHeight > 0) {//MeasureSpc类封装了父View传递给子View的布局(layout)要求
+			height = MeasureSpec.makeMeasureSpec(tempHeight, MeasureSpec.EXACTLY);//高度不为空填充父布局，根据提供的大小值和模式创建一个测量值
 		}
 		else {
 			height = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);//高度为0，不需要填充
 		}
-		view.measure(width, height);
+		view.measure(width, height);//最终将得到的宽和高调用View的measure方法，measure中又会调用onMeasure方法
 	}
 
 	@Override

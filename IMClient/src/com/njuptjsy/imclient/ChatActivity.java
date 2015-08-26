@@ -5,7 +5,6 @@ import java.util.List;
 import com.njuptjsy.imclient.view.AudioRecorderButton;
 import com.njuptjsy.imclient.view.AudioRecorderButton.AudioFinishRecorderListener;
 
-import android.app.Activity;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -17,7 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-
+/**
+ * Author JSY.
+ * 聊天视图的实现Activity
+ */
 public class ChatActivity extends FragmentActivity {
 //	private static final int RESULT_CANCELED = 0;
 //	private static final int RESULT_OK = -1;
@@ -101,8 +103,12 @@ public class ChatActivity extends FragmentActivity {
 
 	}
 	
+	/**
+	 * 点击返回键销毁Activity
+	 * */
 	@Override
 	public void onBackPressed() {
+		//TODO 把这个会话最近的结果返回给会话列表
 		super.onBackPressed();
 		//setResult(resultCode, data);
 		finish();
