@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!-- 定义自定义控件中的属性的声明 -->
+
+    <!-- 定义自定义控件中的属性的声明 -->
     <attr name="myicon" format="reference"></attr>
     <attr name="color" format="color"></attr>
     <attr name="text" format="string"></attr>
@@ -12,6 +13,12 @@
         <attr name="color"></attr>
         <attr name="text"></attr>
         <attr name="text_size"></attr>
+    </declare-styleable>
+
+    <attr name="rightPadding" format="dimension"></attr>
+
+    <declare-styleable name="SlidingMenu">
+        <attr name="rightPadding"></attr>
     </declare-styleable>
 
 </resources>

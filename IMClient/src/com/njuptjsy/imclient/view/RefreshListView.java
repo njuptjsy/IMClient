@@ -38,9 +38,7 @@ public class RefreshListView extends ListView implements OnScrollListener{
 	private IReflashListener listener;//刷新数据的接口
 
 	public RefreshListView(Context context) {
-		super(context);
-		initView(context);
-		this.context = context;
+		this(context, null);
 	}
 
 	public RefreshListView(Context context, AttributeSet attrs, int defStyle) {
@@ -50,9 +48,7 @@ public class RefreshListView extends ListView implements OnScrollListener{
 	}
 
 	public RefreshListView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		initView(context);
-		this.context = context;
+		this(context,attrs,0);
 	}
 
 	/**

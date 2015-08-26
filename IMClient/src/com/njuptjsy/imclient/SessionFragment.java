@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.njuptjsy.imclient.view.RefreshListView;
+import com.njuptjsy.imclient.view.SlidingMenu;
 import com.njuptjsy.imclient.view.RefreshListView.IReflashListener;
 
 import android.app.Activity;
@@ -29,6 +30,7 @@ public class SessionFragment extends Fragment implements IReflashListener{
 	private String[] sessionNames = new String[]{"Miss Sun","刘德华","隔壁老王","小强","张学友","科比"};
 	private String[] lastMsgs = new String[]{"你好，是你吗？","忘情水来一杯","在家吗","我是凤凰","你认识刘德华吗？","凌晨四点见"};
 	private static final int CHATACTIVITY = 1;
+	private SlidingMenu mSlidingMenu;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -45,6 +47,7 @@ public class SessionFragment extends Fragment implements IReflashListener{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		mListView = (RefreshListView) mActivity.findViewById(R.id.id_session_lv);
+		mSlidingMenu = (SlidingMenu) mActivity.findViewById(R.id.id_sliding_menu);
 		initDatas();
 		mArrayAdapter = new SessionAdapter(mActivity, datas);
 		mListView.setAdapter(mArrayAdapter);
@@ -105,7 +108,9 @@ public class SessionFragment extends Fragment implements IReflashListener{
 		datas.add(0,sessionContext);
 	}
 
-	
+	public void toggleSlidingMenu() {
+		mSlidingMenu.toggle();
+	}
 	
 	
 }

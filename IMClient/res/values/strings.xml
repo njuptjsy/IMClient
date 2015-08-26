@@ -22,4 +22,9 @@
     <string name="release_refresh">松开可以刷新!</string>
     <string name="refreshing">正在刷新....</string>
     <string name="last_refresh_time">上次刷新时间 1分钟前</string>
+    <string name="menu_item_1">第一个Item</string>
+    <string name="menu_item_2">第二个Item</string>
+    <string name="menu_item_3">第三个Item</string>
+    <string name="menu_item_4">第四个Item</string>
+    <string name="menu_item_5">第五个Item</string>
 </resources>
