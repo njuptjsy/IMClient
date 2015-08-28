@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:njuptjsy = "http://schemas.android.com/apk/res/com.njuptjsy.imclient"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent" 
+    android:background="@drawable/img_frame_background" >
 
     <com.njuptjsy.imclient.view.SlidingMenu
         android:id="@+id/id_sliding_menu"
@@ -23,7 +24,7 @@
                 <com.njuptjsy.imclient.view.RefreshListView
                     android:id="@+id/id_session_lv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@android:color/white"
                     android:orientation="horizontal" >
                 </com.njuptjsy.imclient.view.RefreshListView>

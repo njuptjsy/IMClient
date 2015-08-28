@@ -1,11 +1,13 @@
 package com.njuptjsy.imclient.view;
 
+import com.nineoldandroids.view.ViewHelper;
 import com.njuptjsy.imclient.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -34,7 +36,6 @@ public class SlidingMenu extends HorizontalScrollView {
 	public SlidingMenu(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
-
 
 	/**
 	 * 当使用了自定义属性时调用
@@ -65,7 +66,6 @@ public class SlidingMenu extends HorizontalScrollView {
 		array.recycle();//TypedArray用完一定要释放
 	}
 
-
 	/**
 	 * 在代码中new这个view
 	 * */
@@ -89,8 +89,6 @@ public class SlidingMenu extends HorizontalScrollView {
 			mContent.getLayoutParams().width = mScreenWidth;
 			once = true;
 		}
-
-
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 	/**
@@ -126,7 +124,7 @@ public class SlidingMenu extends HorizontalScrollView {
 		}
 		return super.onTouchEvent(ev);
 	}
-	
+
 	/**
 	 *显示侧滑菜单
 	 * */
@@ -137,7 +135,7 @@ public class SlidingMenu extends HorizontalScrollView {
 		this.smoothScrollTo(0, 0);
 		isOpen = true;
 	}
-	
+
 	/**
 	 * 关闭菜单
 	 * */
@@ -148,15 +146,52 @@ public class SlidingMenu extends HorizontalScrollView {
 		this.smoothScrollTo(mMenuWidth, 0);
 		isOpen = true;
 	}
-	
+
 	/**
 	 * 切换菜单
 	 * */
-	public void toggle() {
+	public void toggle(){
 		if (isOpen) {
 			closeMenu();
 		}else {
 			openMenu();
 		}
+	}
+	/**
+	 * 滚动发生时调用
+	 * */
+	@Override
+	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+		super.onScrollChanged(l, t, oldl, oldt);
+		/**
+		 * 距离qq差别 ：1.qq内容区域实现了一个缩放的效果 2.菜单的偏移量一直在变化 3.菜单也存在缩放和透明度的变化
+		         实现1.需要将 0.7 ~ 1.0 (0.7 + 0.3 * scale)
+                                 实现2.修改菜单的其实隐藏跨度
+                                 实现3.菜单透明度变化0.6 ~ 1.0 ( 0.6 + 0.4 *(1-scale))+缩放：0.7~1.0（1.0 - scale*0.3）
+		 * */
+		//l是当前SrocllX值
+		float scale = l * 1.0f/mMenuWidth;
+		Log.i("SlidingMenu:onScrollChanged","" +  scale);
+		//调用属性动画 设置TranslationX 修改菜单的其实隐藏跨度,其实隐藏60%
+		ViewHelper.setTranslationX(mMenu, mMenuWidth*scale*0.6f);
+
+		//实现内容区域缩小
+		float contextScale = 0.7f + 0.3f*scale;
+		//设置缩放的中心点 设置内容区域缩放值
+		ViewHelper.setPivotX(mContent, 0);
+		ViewHelper.setPivotY(mContent, mContent.getHeight()/2);
+		ViewHelper.setScaleX(mContent, contextScale);
+		ViewHelper.setScaleY(mContent, contextScale);
+
+		//实现菜单区域缩放
+		float menuScale = 1.0f - scale * 0.3f;
+		//实现菜单透明度变化
+		float menuAlpha = 0.6f + 0.4f*(1 - scale);
+		//调用属性动画实现
+		ViewHelper.setScaleX(mMenu, menuScale);
+		ViewHelper.setScaleY(mMenu, menuScale);
+		ViewHelper.setAlpha(mMenu, menuAlpha);
+		
+
 	}
 }
