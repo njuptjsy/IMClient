@@ -1,4 +1,4 @@
-package com.njuptjsy.imclient;
+package com.njuptjsy.imclient.bean;
 /**
  * 封装每个会话的相关信息
  * */

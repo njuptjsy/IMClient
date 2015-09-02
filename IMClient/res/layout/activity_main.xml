@@ -18,7 +18,7 @@
         android:background="@drawable/tab_bg"
         android:orientation="horizontal" >
 
-        <com.njuptjsy.imclient.ChangeColorIconWithText
+        <com.njuptjsy.imclient.view.ChangeColorIconWithText
             android:id="@+id/id_indicator_one"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
@@ -29,7 +29,7 @@
             njuptjsy:text_size="12sp"
             njuptjsy:color="#ff45c01a" />
 
-        <com.njuptjsy.imclient.ChangeColorIconWithText
+        <com.njuptjsy.imclient.view.ChangeColorIconWithText
             android:id="@+id/id_indicator_two"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
@@ -40,18 +40,18 @@
             njuptjsy:text_size="12sp"
             njuptjsy:color="#ff45c01a" />
 
-        <com.njuptjsy.imclient.ChangeColorIconWithText
+        <com.njuptjsy.imclient.view.ChangeColorIconWithText
             android:id="@+id/id_indicator_three"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:padding="5dp"
             njuptjsy:myicon="@drawable/ic_menu_emoticons"
-            njuptjsy:text="@string/tab_found"
+            njuptjsy:text="@string/tab_turing"
             njuptjsy:text_size="12sp"
             njuptjsy:color="#ff45c01a" />
 
-        <com.njuptjsy.imclient.ChangeColorIconWithText
+        <com.njuptjsy.imclient.view.ChangeColorIconWithText
             android:id="@+id/id_indicator_four"
             android:layout_width="0dp"
             android:layout_height="fill_parent"

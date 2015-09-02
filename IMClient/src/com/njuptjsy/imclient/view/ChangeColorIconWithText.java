@@ -1,4 +1,4 @@
-package com.njuptjsy.imclient;
+package com.njuptjsy.imclient.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,6 +16,7 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+
 import com.njuptjsy.imclient.R;
 
 /**

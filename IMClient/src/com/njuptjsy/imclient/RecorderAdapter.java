@@ -13,10 +13,9 @@ import com.njuptjsy.imclient.ChatActivity.Recorder;
 import java.util.List;
 /**
  * Author JSY.
- * 显示录音文件的ListView的Controller
+ * 显示会话窗口的ListView的Controller
  */
 public class RecorderAdapter extends ArrayAdapter<Recorder>{
-	private List<Recorder> mDatas;
 	private Context mContext;
 	private int mMinItemWidth;
 	private int mMaxItemWidth;
@@ -25,7 +24,6 @@ public class RecorderAdapter extends ArrayAdapter<Recorder>{
 	public RecorderAdapter(Context context, List<Recorder> datas) {
 		super(context, -1,datas);
 		mContext = context;
-		mDatas = datas;
 
 		//获取屏幕的宽度
 		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -62,8 +60,11 @@ public class RecorderAdapter extends ArrayAdapter<Recorder>{
 		return convertView;
 	}
 
-	private  class ViewHolder {
+	private final class ViewHolder {
 		TextView seconds; //时间
 		View length; //长度
 	}
+
+	
+	
 }

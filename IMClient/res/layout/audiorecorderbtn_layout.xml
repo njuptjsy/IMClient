@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_input_record_lv"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:orientation="horizontal" >
+
+    <com.njuptjsy.imclient.view.AudioRecorderButton
+        android:id="@+id/id_record_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="50dp"
+        android:background="@drawable/button_recorder_normal"
+        android:gravity="center"
+        android:minHeight="0dp"
+        android:padding="5dp"
+        android:text="@string/str_recorder_normal"
+        android:textColor="#727272" />
+
+</RelativeLayout>

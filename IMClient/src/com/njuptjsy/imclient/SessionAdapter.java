@@ -3,6 +3,7 @@ package com.njuptjsy.imclient;
 import java.util.List;
 
 import com.jauker.widget.BadgeView;
+import com.njuptjsy.imclient.bean.SessionContext;
 
 import android.content.Context;
 import android.view.LayoutInflater;
