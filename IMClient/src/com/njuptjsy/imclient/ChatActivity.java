@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,9 +48,6 @@ public class ChatActivity extends FragmentActivity {
 	private ListView mListView;
 	private ArrayAdapter<Recorder> mAdapter;
 	private List<Recorder> mDatas = new ArrayList<Recorder>();
-
-	private List<ChatContext> chatContexts = new ArrayList<ChatContext>();
-	private ChatMessageAdapter chatAdapter;
 
 	private AudioRecorderButton mAudioRecorderButton;
 	private Button switcherButton,sendTextButton;
@@ -89,10 +87,10 @@ public class ChatActivity extends FragmentActivity {
 		mHandler = new Handler(){
 			@Override
 			public void handleMessage(Message msg) {
-				//等待接受子线程返回的，智能机器人的数据
-				ChatContext receiveMsg = (ChatContext) msg.obj;
-				chatContexts.add(receiveMsg);
-				chatAdapter.notifyDataSetChanged();
+				//等待接受子线程返回的，会话返回的数据
+//				ChatContext receiveMsg = (ChatContext) msg.obj;
+//				chatContexts.add(receiveMsg);
+//				chatAdapter.notifyDataSetChanged();
 			}
 		};
 	}
@@ -108,12 +106,12 @@ public class ChatActivity extends FragmentActivity {
 					return;
 				}
 				
-				ChatContext sendMsg = new ChatContext();
-				sendMsg.setDate(new Date());
-				sendMsg.setMsg(inputMsg);
-				sendMsg.setType(Type.OUTCOMING);
-				chatContexts.add(sendMsg);
-				chatAdapter.notifyDataSetChanged();
+//				ChatContext sendMsg = new ChatContext();
+//				sendMsg.setDate(new Date());
+//				sendMsg.setMsg(inputMsg);
+//				sendMsg.setType(Type.OUTCOMING);
+//				chatContexts.add(sendMsg);
+//				chatAdapter.notifyDataSetChanged();
 				inputText.setText("");//清空输入框中的文本
 				
 				new Thread(){
@@ -130,6 +128,10 @@ public class ChatActivity extends FragmentActivity {
 	}
 
 	private void initView() {
+//		inputText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+//		inputText.setSingleLine(false);
+//		inputText.setHorizontallyScrolling(false);
+		
 		initBtn();
 		initRecorderBtn();
 		initListview();
@@ -175,36 +177,36 @@ public class ChatActivity extends FragmentActivity {
 	private void initListview() {
 		mAdapter = new RecorderAdapter(this, mDatas);
 
-		chatContexts = new ArrayList<ChatContext>();
-		//TODO for text
-		chatContexts.add(new ChatContext("你好，我是小图", Type.INCOMING, new Date()));
-		chatAdapter = new ChatMessageAdapter(this, chatContexts);
-		mListView.setAdapter(chatAdapter);
+//		chatContexts = new ArrayList<ChatContext>();
+//		//TODO for text
+//		chatContexts.add(new ChatContext("你好，我是小图", Type.INCOMING, new Date()));
+//		chatAdapter = new ChatMessageAdapter(this, chatContexts);
+		mListView.setAdapter(mAdapter);
 
-		//		mListView.setAdapter(mAdapter);
-		//
-		//		mListView.setOnItemClickListener(new OnItemClickListener() {
-		//
-		//			@Override
-		//			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-		//				if (mAnimView != null) {
-		//					mAnimView.setBackgroundResource(R.drawable.adj);;
-		//				}
-		//				//播放动画
-		//				mAnimView = view.findViewById(R.id.recorder_anim);
-		//				mAnimView.setBackgroundResource(R.drawable.play_anim);
-		//				AnimationDrawable anim = (AnimationDrawable) mAnimView.getBackground();
-		//				anim.start();
-		//				//播放音频
-		//				MediaManager.playSound(mDatas.get(position).filePath, new MediaPlayer.OnCompletionListener() {
-		//
-		//					@Override
-		//					public void onCompletion(MediaPlayer mp) {//音频播放结束，取消动画
-		//						mAnimView.setBackgroundResource(R.drawable.adj);
-		//					}
-		//				});
-		//			}
-		//		});
+				mListView.setAdapter(mAdapter);
+		
+				mListView.setOnItemClickListener(new OnItemClickListener() {
+		
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+						if (mAnimView != null) {
+							mAnimView.setBackgroundResource(R.drawable.adj);;
+						}
+						//播放动画
+						mAnimView = view.findViewById(R.id.recorder_anim);
+						mAnimView.setBackgroundResource(R.drawable.play_anim);
+						AnimationDrawable anim = (AnimationDrawable) mAnimView.getBackground();
+						anim.start();
+						//播放音频
+						MediaManager.playSound(mDatas.get(position).filePath, new MediaPlayer.OnCompletionListener() {
+		
+							@Override
+							public void onCompletion(MediaPlayer mp) {//音频播放结束，取消动画
+								mAnimView.setBackgroundResource(R.drawable.adj);
+							}
+						});
+					}
+				});
 	}
 
 	private void initRecorderBtn() {

@@ -28,8 +28,8 @@ public class SessionFragment extends Fragment implements IReflashListener{
 	private RefreshListView mListView;
 	private ArrayAdapter<SessionContext> mArrayAdapter;
 	private List<SessionContext> datas = new ArrayList<SessionContext>();
-	private String[] sessionNames = new String[]{"Miss Sun","刘德华","隔壁老王","小强","张学友","科比","小图"};
-	private String[] lastMsgs = new String[]{"你好，是你吗？","忘情水来一杯","在家吗","我是凤凰","你认识刘德华吗？","凌晨四点见","我是机器人，小图"};
+	private String[] sessionNames = new String[]{"Miss Sun","刘德华","隔壁老王","小强","张学友","科比"};
+	private String[] lastMsgs = new String[]{"你好，是你吗？","忘情水来一杯","在家吗","我是凤凰","你认识刘德华吗？","凌晨四点见"};
 	private static final int CHATACTIVITY = 1;
 	private SlidingMenu mSlidingMenu;
 	

@@ -26,7 +26,6 @@ public class SessionAdapter extends ArrayAdapter<SessionContext>{
 		mContext = context;
 		mLayoutInflater = LayoutInflater.from(mContext);
 	}
-
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
