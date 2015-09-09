@@ -1,11 +1,12 @@
 package com.njuptjsy.imclient.utils;
 
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
-import android.annotation.SuppressLint;
+import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -36,6 +37,7 @@ public class ImageLoader {
 	private Handler mLoopThreadHandler;
 	private Handler mUIHandler;//用于在后台更新图片
 	private Semaphore mSemaphoreLoopThreadHandler = new Semaphore(0);
+	private Semaphore mSemaphoreThreadPool;
 
 	private ImageLoader(int threadCount,Type type){
 		init(threadCount,type);
@@ -53,6 +55,11 @@ public class ImageLoader {
 					public void handleMessage(Message msg) {
 						//线程池取出一个任务进行执行
 						mThreadPool.execute(getTask());
+						try {
+							mSemaphoreThreadPool.acquire();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 				};
 				mSemaphoreLoopThreadHandler.release();
@@ -76,6 +83,8 @@ public class ImageLoader {
 		mThreadPool = Executors.newFixedThreadPool(threadCount);
 		mTaskQueue = new LinkedList<Runnable>();
 		mType = type;
+
+		mSemaphoreThreadPool = new Semaphore(threadCount);//运行同时多个线程并行
 	}
 
 	/**
@@ -91,17 +100,19 @@ public class ImageLoader {
 		return null;
 	}
 
-	public static ImageLoader getInstance(){
+	public static ImageLoader getInstance(int threadCount,Type type){
 		if (mInstance == null) {//先不做同步处理，在初始化之后可以过滤大量代码
 			synchronized (ImageLoader.class) {//如果刚刚开始两个线程进入会进图同步
 				if (mInstance == null) {//多个线程进入第一个if后，因为同步阻塞，得到锁之后也要在判断一次，保证不出错
-					mInstance = new ImageLoader(DEAFULT_THREAD_COUNT,Type.LIFO);
+					mInstance = new ImageLoader(threadCount, type);
 				}
 			}
 		}
 		return mInstance;
 	}
 
+	
+	
 	/**
 	 * 根据path为imageView设置图片
 	 * */
@@ -142,6 +153,7 @@ public class ImageLoader {
 					addBitmapToLruCache(path,bm);
 
 					refreshBitmap(path, imageView, bm);
+					mSemaphoreThreadPool.release();
 				}
 
 
@@ -211,18 +223,19 @@ public class ImageLoader {
 	/**
 	 *根据imageview获得图片需要显示的大小 
 	 * */
-	@SuppressLint("NewApi")
 	private ImageSize getImageViewSize(ImageView imageView) {
 		DisplayMetrics displayMetrics = imageView.getContext().getResources().getDisplayMetrics();
 
 		ImageSize imageSize = new ImageSize();
 		LayoutParams lp = imageView.getLayoutParams();
-		int width = imageView.getWidth();//获取imageview的实际宽度，但可能由于imageview还未添加到容器中，这边可能为0
+		//获取imageview的实际宽度，但可能由于imageview还未添加到容器中，这边可能为0
+		int width = imageView.getWidth();
 		if (width <= 0) {
 			width = lp.width;//获取imageview在layout中声明的宽度
 		}
 		if (width <= 0) {
-			width = imageView.getMaxWidth();//检查最大值
+			//width = imageView.getMaxWidth();//检查最大值
+			width = getImageViewFieldValue(imageView, "mMaxWidth");
 		}
 		if(width <= 0){//最坏的情况无法获取宽度，使用屏幕的宽度
 			width = displayMetrics.widthPixels;
@@ -233,7 +246,7 @@ public class ImageLoader {
 			height = lp.height;//获取imageview在layout中声明的宽度
 		}
 		if (height <= 0) {
-			height = imageView.getMaxHeight();//检查最大值
+			height = getImageViewFieldValue(imageView, "mMaxHeight");//检查最大值
 		}
 		if(width <= 0){//最坏的情况无法获取高度，使用屏幕的高度
 			height = displayMetrics.heightPixels;
@@ -241,6 +254,25 @@ public class ImageLoader {
 		imageSize.height = height;
 		imageSize.width = width;
 		return imageSize;
+	}
+
+	/**
+	 * 通过反射获取imageView的某个值
+	 * */
+	private static int getImageViewFieldValue(Object object,String fieldName) {
+		int value = 0;
+
+
+		try {
+			Field field = ImageView.class.getDeclaredField(fieldName);
+			field.setAccessible(true);
+			int fieldValue = field.getInt(object);
+			if (fieldValue > 0 && fieldValue < Integer.MAX_VALUE) {
+				value = fieldValue;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();}
+		return value;
 	}
 
 	/**
