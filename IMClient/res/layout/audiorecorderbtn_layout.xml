@@ -6,7 +6,9 @@
     android:layout_gravity="center_vertical"
     android:orientation="horizontal" >
 
-    <com.njuptjsy.imclient.view.AudioRecorderButton
+     
+
+     <com.njuptjsy.imclient.view.AudioRecorderButton
         android:id="@+id/id_record_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -18,5 +20,4 @@
         android:padding="5dp"
         android:text="@string/str_recorder_normal"
         android:textColor="#727272" />
-
 </RelativeLayout>

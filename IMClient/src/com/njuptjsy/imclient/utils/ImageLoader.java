@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
-import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -104,7 +103,12 @@ public class ImageLoader {
 		if (mInstance == null) {//先不做同步处理，在初始化之后可以过滤大量代码
 			synchronized (ImageLoader.class) {//如果刚刚开始两个线程进入会进图同步
 				if (mInstance == null) {//多个线程进入第一个if后，因为同步阻塞，得到锁之后也要在判断一次，保证不出错
-					mInstance = new ImageLoader(threadCount, type);
+					if (threadCount <= 0) {
+						mInstance = new ImageLoader(DEAFULT_THREAD_COUNT, type);
+					}else {
+						mInstance = new ImageLoader(threadCount, type);
+					}
+					
 				}
 			}
 		}
