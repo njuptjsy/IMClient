@@ -3,11 +3,13 @@ package com.njuptjsy.imclient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import com.njuptjsy.imclient.bean.ChatContext;
 import com.njuptjsy.imclient.bean.ChatContext.Type;
 import com.njuptjsy.imclient.utils.HttpUtils;
 import com.njuptjsy.imclient.view.AudioRecorderButton;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +24,9 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 /**
@@ -41,20 +45,27 @@ public class TuringActivity extends FragmentActivity{
 	private EditText inputText;
 	private View audioRecordBtnView;
 	private Handler mHandler;
-
+	private View sendMsgBtnView;
+	private RelativeLayout mRelativeLayout;
+	private LinearLayout mPlusSendLinearLayout;
+	
 	@SuppressLint("InflateParams")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.chat_layout);
-
+		
 		mListView = (ListView) findViewById(R.id.id_listview);
 		switcherButton = (Button) findViewById(R.id.id_swtich_button);
-		sendTextButton = (Button) findViewById(R.id.id_send_text_button);
+		mRelativeLayout = (RelativeLayout) findViewById(R.id.id_input_view);
+		mPlusSendLinearLayout = (LinearLayout) findViewById(R.id.id_plus_send_lv);
+		LayoutInflater inflater = LayoutInflater.from(this);
+		sendMsgBtnView = inflater.inflate(R.layout.send_msg_btn_layout, null);
+		sendTextButton = (Button) sendMsgBtnView.findViewById(R.id.id_send_text_button);
+		
 		inputText = (EditText) findViewById(R.id.id_input_et);
 
-		LayoutInflater inflater = LayoutInflater.from(this);
 		audioRecordBtnView = inflater.inflate(R.layout.audiorecorderbtn_layout, null);
 		mAudioRecorderButton = (AudioRecorderButton) audioRecordBtnView.findViewById(R.id.id_record_button);
 
@@ -109,9 +120,8 @@ public class TuringActivity extends FragmentActivity{
 	}
 
 	private void initView() {
-		inputText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-		inputText.setSingleLine(false);
-		inputText.setHorizontallyScrolling(false);
+		mRelativeLayout.removeView(mPlusSendLinearLayout);
+		mRelativeLayout.addView(sendMsgBtnView);
 		
 		initBtn();
 		initListview();

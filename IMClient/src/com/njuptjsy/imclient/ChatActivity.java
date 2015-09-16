@@ -297,9 +297,9 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		Log.i("ChatActivity:onTextChanged", "输入文字中的状态s: "+s.toString());
-		if (!s.toString().isEmpty() && !showSendBtn) {
+		if ((!s.toString().isEmpty()) && (!showSendBtn)) {
 			changeToSendBtn();
-		}else{
+		}else if(s.toString().isEmpty() && showSendBtn){
 			changeToPlusBtn();
 		}
 	}
@@ -308,6 +308,7 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 	 * 将发送按钮替换成plus按钮
 	 * */
 	private void changeToPlusBtn() {
+		Log.i("ChatActivity:changeToPlusBtn", "This is changeToPlusBtn");
 		mRelativeLayout.removeView(sendMsgBtnView);
 		mRelativeLayout.addView(mPlusSendLinearLayout);
 		showSendBtn = false;
@@ -317,6 +318,7 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 	 * 将plus按钮替换成发送按钮
 	 * */
 	private void changeToSendBtn() {
+		Log.i("ChatActivity:changeToSendBtn", "This is changeToSendBtn");
 		mRelativeLayout.removeView(mPlusSendLinearLayout);
 		mRelativeLayout.addView(sendMsgBtnView);
 		showSendBtn = true;
