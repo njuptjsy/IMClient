@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout;
@@ -50,14 +51,16 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 	private AudioRecorderButton mAudioRecorderButton;
 	private Button switcherButton,sendTextButton,plusButton;
 	private EditText inputText;
+	private TextView chatNameTv;
 	private View mAnimView;
 	private View audioRecordBtnView,sendMsgBtnView;
-	private LinearLayout mInputMsgLinearLayout,mPlusSendLinearLayout;
+	private LinearLayout mInputMsgLinearLayout,mPlusSendLinearLayout,moreBtnLinearLayout;
 	private RelativeLayout mRelativeLayout;
 	private boolean showRecorder,showSendBtn;
 	private InputMethodManager imm;
 	private Handler mHandler;
-
+	private String chatName;
+	private static final String SESSIONNAME = "sessionName";
 	@SuppressLint("InflateParams")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,25 +68,8 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE); 
 		setContentView(R.layout.chat_layout);
+		chatName = getIntent().getStringExtra(SESSIONNAME);
 
-		mListView = (ListView) findViewById(R.id.id_listview);
-		switcherButton = (Button) findViewById(R.id.id_swtich_button);
-		plusButton = (Button) findViewById(R.id.id_plus_button);//TODO 添加监听事件，显示图片选择器
-		inputText = (EditText) findViewById(R.id.id_input_et);
-		inputText.addTextChangedListener(this);
-		mInputMsgLinearLayout = (LinearLayout) findViewById(R.id.id_input_msg_lv);
-		mPlusSendLinearLayout = (LinearLayout) findViewById(R.id.id_plus_send_lv);
-		mRelativeLayout = (RelativeLayout) findViewById(R.id.id_input_view);
-		
-		//实例化两个动态添加的view组件
-		LayoutInflater inflater = LayoutInflater.from(this);
-		sendMsgBtnView = inflater.inflate(R.layout.send_msg_btn_layout, null);
-		sendTextButton = (Button) sendMsgBtnView.findViewById(R.id.id_send_text_button);
-
-		audioRecordBtnView = inflater.inflate(R.layout.audiorecorderbtn_layout, null);
-		mAudioRecorderButton = (AudioRecorderButton) audioRecordBtnView.findViewById(R.id.id_record_button);
-
-		Log.i("ChatFragment.onCreare", (mAudioRecorderButton == null)+"");
 		initHandler();
 		initView();
 		initListener();	
@@ -137,10 +123,63 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 		//		inputText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 		//		inputText.setSingleLine(false);
 		//		inputText.setHorizontallyScrolling(false);
+		mListView = (ListView) findViewById(R.id.id_listview);
+		switcherButton = (Button) findViewById(R.id.id_swtich_button);
+		plusButton = (Button) findViewById(R.id.id_plus_button);//TODO 添加监听事件，显示图片选择器
+		inputText = (EditText) findViewById(R.id.id_input_et);
 
+
+		mInputMsgLinearLayout = (LinearLayout) findViewById(R.id.id_input_msg_lv);
+		mPlusSendLinearLayout = (LinearLayout) findViewById(R.id.id_plus_send_lv);
+		mRelativeLayout = (RelativeLayout) findViewById(R.id.id_input_view);
+		chatNameTv = (TextView) findViewById(R.id.chat_name);
+		moreBtnLinearLayout  = (LinearLayout) findViewById(R.id.more);
+
+		//实例化两个动态添加的view组件
+		LayoutInflater inflater = LayoutInflater.from(this);
+		sendMsgBtnView = inflater.inflate(R.layout.send_msg_btn_layout, null);
+		sendTextButton = (Button) sendMsgBtnView.findViewById(R.id.id_send_text_button);
+
+		audioRecordBtnView = inflater.inflate(R.layout.audiorecorderbtn_layout, null);
+		mAudioRecorderButton = (AudioRecorderButton) audioRecordBtnView.findViewById(R.id.id_record_button);
+		Log.i("ChatFragment.onCreare", (mAudioRecorderButton == null)+"");
+		//根据当前的会话名设置顶部的显示
+		chatNameTv.setText(chatName);
 		initSwtichBtn();
 		initRecorderBtn();
+		initPlusBtn();
+		initInputEt();
 		initListview();
+	}
+
+	private void initInputEt() {
+		inputText.addTextChangedListener(this);	
+		inputText.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (moreBtnLinearLayout.getVisibility() == View.VISIBLE) {
+					moreBtnLinearLayout.setVisibility(View.GONE);
+				}
+			}
+		});
+	}
+
+	private void initPlusBtn() {
+		plusButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (moreBtnLinearLayout.getVisibility() == View.GONE) {
+					moreBtnLinearLayout.setVisibility(View.VISIBLE);
+					if (imm.isActive()) {
+						imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+					}
+				}else {
+					moreBtnLinearLayout.setVisibility(View.GONE);
+				}
+			}
+		});
 	}
 
 	private void initSwtichBtn() {

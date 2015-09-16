@@ -32,6 +32,7 @@ public class SessionFragment extends Fragment implements IReflashListener{
 	private String[] lastMsgs = new String[]{"你好，是你吗？","忘情水来一杯","在家吗","我是凤凰","你认识刘德华吗？","凌晨四点见"};
 	private static final int CHATACTIVITY = 1;
 	private SlidingMenu mSlidingMenu;
+	private static final String SESSIONNAME = "sessionName";
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -47,9 +48,14 @@ public class SessionFragment extends Fragment implements IReflashListener{
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		initDatas();
+		initView();
+		
+	}
+
+	private void initView() {
 		mListView = (RefreshListView) mActivity.findViewById(R.id.id_session_lv);
 		mSlidingMenu = (SlidingMenu) mActivity.findViewById(R.id.id_sliding_menu);
-		initDatas();
 		mArrayAdapter = new SessionAdapter(mActivity, datas);
 		mListView.setAdapter(mArrayAdapter);
 		mListView.setOnReflashListener(this);
@@ -63,6 +69,7 @@ public class SessionFragment extends Fragment implements IReflashListener{
 //				}
 //				((MainActivity)mActivity).toChatFragmet(SessionFragment.this,position);
 				Intent intent = new Intent(mActivity.getApplicationContext(),ChatActivity.class);
+				intent.putExtra(SESSIONNAME, sessionNames[position-1]);
 				startActivityForResult(intent,CHATACTIVITY);
 			}
 		});

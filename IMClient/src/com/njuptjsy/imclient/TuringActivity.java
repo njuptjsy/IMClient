@@ -3,8 +3,6 @@ package com.njuptjsy.imclient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.Inflater;
-
 import com.njuptjsy.imclient.bean.ChatContext;
 import com.njuptjsy.imclient.bean.ChatContext.Type;
 import com.njuptjsy.imclient.utils.HttpUtils;
@@ -15,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
