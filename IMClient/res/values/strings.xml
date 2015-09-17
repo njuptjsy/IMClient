@@ -38,4 +38,6 @@
     <string name="no_sdcard">当前存储卡不可以</string>
     <string name="loading_now">正在加载...</string>
     <string name="pic_not_found">未扫描到任何图片</string>
+    <string name="test_allpic">所有图片</string>
+    <string name="test_num">1212张</string>
 </resources>

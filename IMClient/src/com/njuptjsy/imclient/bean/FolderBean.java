@@ -17,8 +17,8 @@ public class FolderBean {
 	public void setCurrentDirPath(String currentDirPath) {
 		this.currentDirPath = currentDirPath;
 		//根据文件路径获得文件夹名称
-		int lastIndexOf = this.currentDirPath.indexOf("/");
-		this.currentDirName = this.currentDirPath.substring(lastIndexOf);
+		int lastIndexOf = this.currentDirPath.lastIndexOf("/");
+		this.currentDirName = this.currentDirPath.substring(lastIndexOf+1);
 	}
 	
 	public String getFirstImgPath() {

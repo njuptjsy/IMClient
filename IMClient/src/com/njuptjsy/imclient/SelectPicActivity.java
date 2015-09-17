@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.njuptjsy.imclient.ListImageDirPopupWindow.OnDirSelectedListener;
 import com.njuptjsy.imclient.adapter.ImageAdapter;
 import com.njuptjsy.imclient.bean.FolderBean;
 
@@ -21,7 +22,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.GridView;
+import android.widget.PopupWindow.OnDismissListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +49,8 @@ public class SelectPicActivity extends FragmentActivity {
 	private List<FolderBean> mFolderBeans = new ArrayList<FolderBean>();
 	private ProgressDialog mProgressDialog;
 	private static final int PIC_LOADED = 0X110;
-	
+	private ListImageDirPopupWindow mDirPopupWindow;
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
@@ -52,8 +58,39 @@ public class SelectPicActivity extends FragmentActivity {
 		initHandler();
 		initDatas();
 		initView();
+		initEvent();
 	}
-	
+
+	private void initEvent() {
+		mBottomLy.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mDirPopupWindow.setAnimationStyle(R.style.dir_popupwindow_anim);
+				mDirPopupWindow.showAsDropDown(mBottomLy,0,0);
+				lightOff();
+			}
+		});
+	}
+
+	/**
+	 * 内容区域变暗
+	 * */
+	protected void lightOff() {
+		WindowManager.LayoutParams lp = getWindow().getAttributes();
+		lp.alpha = 0.3f;
+		getWindow().setAttributes(lp);
+	}
+
+	/**
+	 * 将popup中的内容区域变亮
+	 * */
+	protected void lightOn() {
+		WindowManager.LayoutParams lp = getWindow().getAttributes();
+		lp.alpha = 1.0f;
+		getWindow().setAttributes(lp);
+	}
+
 	private void initView() {
 		mGridView = (GridView) findViewById(R.id.id_gridView);
 		mBottomLy = (RelativeLayout) findViewById(R.id.id_bottom_ly);
@@ -75,9 +112,47 @@ public class SelectPicActivity extends FragmentActivity {
 				if (msg.what == PIC_LOADED) {
 					mProgressDialog.dismiss();
 					dataToView();//为gridview设置数据
+					initDirPopupWindow();
 				}
 			}
 		};
+	}
+
+	protected void initDirPopupWindow() {
+		mDirPopupWindow = new ListImageDirPopupWindow(this, mFolderBeans);
+		mDirPopupWindow.setOnDismissListener(new OnDismissListener() {
+
+			@Override
+			public void onDismiss() {
+				lightOn();
+			}
+		});
+		mDirPopupWindow.setOnDirSelectedListener(new OnDirSelectedListener() {
+
+			@Override
+			public void onSeleted(FolderBean folderBean) {//更新文件夹 和图片
+				mCurrentDir = new File(folderBean.getCurrentDirPath());
+				mImgs = Arrays.asList(mCurrentDir.list(new FilenameFilter() {
+
+					@Override
+					public boolean accept(File dir, String filename) {
+						if (filename.endsWith(".jpg")||filename.endsWith(".png")||filename.endsWith(".jpeg")) {
+							return true;
+						}else {
+							return false;
+						}
+					}
+				}));
+				//也可不new adapter 更新里面的datas 接着notify
+				mImageAdapter = new ImageAdapter(SelectPicActivity.this, mImgs, mCurrentDir.getAbsolutePath());
+				mGridView.setAdapter(mImageAdapter);
+				
+				mDirCount.setText(mImgs.size() + "");
+				mDirName.setText(folderBean.getCurrentDirName());
+				
+				mDirPopupWindow.dismiss();
+			}
+		});
 	}
 
 	/**
@@ -92,7 +167,7 @@ public class SelectPicActivity extends FragmentActivity {
 			mImgs = Arrays.asList(mCurrentDir.list());
 			mImageAdapter = new ImageAdapter(this, mImgs, mCurrentDir.getAbsolutePath());
 			mGridView.setAdapter(mImageAdapter);
-			
+
 			mDirCount.setText(mMaxCount +"");
 			mDirName.setText(mCurrentDir.getName());
 		}
@@ -155,12 +230,12 @@ public class SelectPicActivity extends FragmentActivity {
 					}).length;
 					folderBean.setDirPicCount(picNum);
 					mFolderBeans.add(folderBean);
-					
+
 					if (picNum > mMaxCount) {
 						mMaxCount = picNum;
 						mCurrentDir = parentFile;
 					}
-					
+
 				}
 				//扫描完成 释放内存
 				cursor.close();

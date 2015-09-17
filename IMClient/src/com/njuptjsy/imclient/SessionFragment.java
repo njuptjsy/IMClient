@@ -70,7 +70,7 @@ public class SessionFragment extends Fragment implements IReflashListener{
 //				}
 //				((MainActivity)mActivity).toChatFragmet(SessionFragment.this,position);
 				Intent intent = new Intent(mActivity.getApplicationContext(),ChatActivity.class);
-				intent.putExtra(SESSIONNAME, sessionNames[position-1]);
+				intent.putExtra(SESSIONNAME, datas.get(position-1).getSessionName());
 				startActivityForResult(intent,CHATACTIVITY);
 			}
 		});
