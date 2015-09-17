@@ -1,4 +1,4 @@
-package com.njuptjsy.imclient;
+package com.njuptjsy.imclient.adapter;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -8,7 +8,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import com.njuptjsy.imclient.ChatActivity.Recorder;
+
+import com.njuptjsy.imclient.ChatActivity;
+import com.njuptjsy.imclient.R;
+import com.njuptjsy.imclient.bean.Recorder;
+import com.njuptjsy.imclient.R.id;
+import com.njuptjsy.imclient.R.layout;
 
 import java.util.List;
 /**
@@ -48,10 +53,10 @@ public class RecorderAdapter extends ArrayAdapter<Recorder>{
 		}else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.seconds.setText(Math.round(getItem(position).time)+"\"");
+		holder.seconds.setText(Math.round(getItem(position).getTime())+"\"");
 		ViewGroup.LayoutParams lp = holder.length.getLayoutParams();
-		if (getItem(position).time < 60) {
-			lp.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f)* getItem(position).time);
+		if (getItem(position).getTime() < 60) {
+			lp.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f)* getItem(position).getTime());
 		}else {
 			lp.width = (int) (1.25f*mMinItemWidth + mMaxItemWidth);
 		}

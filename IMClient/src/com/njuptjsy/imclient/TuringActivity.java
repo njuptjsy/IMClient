@@ -3,6 +3,8 @@ package com.njuptjsy.imclient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.njuptjsy.imclient.adapter.ChatMessageAdapter;
 import com.njuptjsy.imclient.bean.ChatContext;
 import com.njuptjsy.imclient.bean.ChatContext.Type;
 import com.njuptjsy.imclient.utils.HttpUtils;

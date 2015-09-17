@@ -3,6 +3,7 @@ package com.njuptjsy.imclient;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.njuptjsy.imclient.adapter.SessionAdapter;
 import com.njuptjsy.imclient.bean.SessionContext;
 import com.njuptjsy.imclient.view.RefreshListView;
 import com.njuptjsy.imclient.view.SlidingMenu;

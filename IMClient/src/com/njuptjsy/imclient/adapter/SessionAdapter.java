@@ -1,8 +1,11 @@
-package com.njuptjsy.imclient;
+package com.njuptjsy.imclient.adapter;
 
 import java.util.List;
 
 import com.jauker.widget.BadgeView;
+import com.njuptjsy.imclient.R;
+import com.njuptjsy.imclient.R.id;
+import com.njuptjsy.imclient.R.layout;
 import com.njuptjsy.imclient.bean.SessionContext;
 
 import android.content.Context;

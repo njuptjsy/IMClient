@@ -37,6 +37,10 @@
             android:name="com.njuptjsy.imclient.TuringActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.njuptjsy.imclient.SelectPicActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
     <instrumentation

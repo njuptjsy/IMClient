@@ -1,13 +1,15 @@
 package com.njuptjsy.imclient;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.njuptjsy.imclient.adapter.*;
 import com.njuptjsy.imclient.bean.ChatContext;
 import com.njuptjsy.imclient.utils.HttpUtils;
 import com.njuptjsy.imclient.view.AudioRecorderButton;
 import com.njuptjsy.imclient.view.AudioRecorderButton.AudioFinishRecorderListener;
+import com.njuptjsy.imclient.bean.Recorder;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,7 +42,7 @@ import android.widget.RelativeLayout;
  * Author JSY.
  * 聊天视图的实现Activity
  */
-public class ChatActivity extends FragmentActivity implements TextWatcher{
+public class ChatActivity extends FragmentActivity implements TextWatcher,OnClickListener{
 	//	private static final int RESULT_CANCELED = 0;
 	//	private static final int RESULT_OK = -1;
 	//	private static final int RESULT_FIRST_USER = 1;用来作为setResult函数中的resultCode
@@ -52,15 +55,17 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 	private Button switcherButton,sendTextButton,plusButton;
 	private EditText inputText;
 	private TextView chatNameTv;
-	private View mAnimView;
-	private View audioRecordBtnView,sendMsgBtnView;
+	private View audioRecordBtnView,sendMsgBtnView,mAnimView;
 	private LinearLayout mInputMsgLinearLayout,mPlusSendLinearLayout,moreBtnLinearLayout;
 	private RelativeLayout mRelativeLayout;
+	private ImageView selectPicBtn;
 	private boolean showRecorder,showSendBtn;
 	private InputMethodManager imm;
 	private Handler mHandler;
 	private String chatName;
 	private static final String SESSIONNAME = "sessionName";
+	private static final int PIC_SELECTED = 1;
+	
 	@SuppressLint("InflateParams")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +77,12 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 
 		initHandler();
 		initView();
-		initListener();	
+		initListener();
+		
+
 	}
+
+	
 
 	private void initHandler() {
 		mHandler = new Handler(){
@@ -83,10 +92,11 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 				//				ChatContext receiveMsg = (ChatContext) msg.obj;
 				//				chatContexts.add(receiveMsg);
 				//				chatAdapter.notifyDataSetChanged();
+				
 			}
 		};
 	}
-
+	
 	private void initListener() {
 		sendTextButton.setOnClickListener(new OnClickListener() {
 
@@ -123,20 +133,21 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 		//		inputText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 		//		inputText.setSingleLine(false);
 		//		inputText.setHorizontallyScrolling(false);
+		LayoutInflater inflater = LayoutInflater.from(this);
+		
 		mListView = (ListView) findViewById(R.id.id_listview);
 		switcherButton = (Button) findViewById(R.id.id_swtich_button);
-		plusButton = (Button) findViewById(R.id.id_plus_button);//TODO 添加监听事件，显示图片选择器
+		plusButton = (Button) findViewById(R.id.id_plus_button);
 		inputText = (EditText) findViewById(R.id.id_input_et);
-
+		selectPicBtn = (ImageView) findViewById(R.id.btn_picture);
 
 		mInputMsgLinearLayout = (LinearLayout) findViewById(R.id.id_input_msg_lv);
 		mPlusSendLinearLayout = (LinearLayout) findViewById(R.id.id_plus_send_lv);
 		mRelativeLayout = (RelativeLayout) findViewById(R.id.id_input_view);
 		chatNameTv = (TextView) findViewById(R.id.chat_name);
 		moreBtnLinearLayout  = (LinearLayout) findViewById(R.id.more);
-
+		
 		//实例化两个动态添加的view组件
-		LayoutInflater inflater = LayoutInflater.from(this);
 		sendMsgBtnView = inflater.inflate(R.layout.send_msg_btn_layout, null);
 		sendTextButton = (Button) sendMsgBtnView.findViewById(R.id.id_send_text_button);
 
@@ -145,6 +156,8 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 		Log.i("ChatFragment.onCreare", (mAudioRecorderButton == null)+"");
 		//根据当前的会话名设置顶部的显示
 		chatNameTv.setText(chatName);
+		
+		selectPicBtn.setOnClickListener(this);
 		initSwtichBtn();
 		initRecorderBtn();
 		initPlusBtn();
@@ -152,6 +165,9 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 		initListview();
 	}
 
+	/**
+	 * 为inputButton绑定监听事件
+	 * */
 	private void initInputEt() {
 		inputText.addTextChangedListener(this);	
 		inputText.setOnClickListener(new OnClickListener() {
@@ -165,6 +181,10 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 		});
 	}
 
+	/**
+	 * 为plusButton绑定监听事件
+	 * 设置moreBtnLinearLayout的可见性
+	 * */
 	private void initPlusBtn() {
 		plusButton.setOnClickListener(new OnClickListener() {
 
@@ -221,11 +241,6 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 
 	private void initListview() {
 		mAdapter = new RecorderAdapter(this, mDatas);
-
-		//		chatContexts = new ArrayList<ChatContext>();
-		//		//TODO for text
-		//		chatContexts.add(new ChatContext("你好，我是小图", Type.INCOMING, new Date()));
-		//		chatAdapter = new ChatMessageAdapter(this, chatContexts);
 		mListView.setAdapter(mAdapter);
 
 		mListView.setAdapter(mAdapter);
@@ -243,7 +258,7 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 				AnimationDrawable anim = (AnimationDrawable) mAnimView.getBackground();
 				anim.start();
 				//播放音频
-				MediaManager.playSound(mDatas.get(position).filePath, new MediaPlayer.OnCompletionListener() {
+				MediaManager.playSound(mDatas.get(position).getFilePath(), new MediaPlayer.OnCompletionListener() {
 
 					@Override
 					public void onCompletion(MediaPlayer mp) {//音频播放结束，取消动画
@@ -267,32 +282,7 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 		});
 	}
 
-	class Recorder{
-		float time;
-		String filePath;
-		public Recorder(float time, String filePath) {
-			super();
-			this.time = time;
-			this.filePath = filePath;
-		}
-
-		public float getTime() {
-			return time;
-		}
-
-		public void setTime(float time) {
-			this.time = time;
-		}
-
-		public String getFilePath() {
-			return filePath;
-		}
-
-		public void setFilePath(String filePath) {
-			this.filePath = filePath;
-		}
-
-	}
+	
 
 	/**
 	 * 点击返回键销毁Activity
@@ -347,7 +337,6 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 	 * 将发送按钮替换成plus按钮
 	 * */
 	private void changeToPlusBtn() {
-		Log.i("ChatActivity:changeToPlusBtn", "This is changeToPlusBtn");
 		mRelativeLayout.removeView(sendMsgBtnView);
 		mRelativeLayout.addView(mPlusSendLinearLayout);
 		showSendBtn = false;
@@ -368,8 +357,23 @@ public class ChatActivity extends FragmentActivity implements TextWatcher{
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		Log.i("ChatActivity:afterTextChanged", "输入文字后的状态");  
 
+	}
+
+
+	/**
+	 * 统一的为所有的在button Container中的按钮处理点击事件
+	 * */
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_picture:
+			Log.i("ChatActivity:onClick", "click btn_picture");
+			Intent intent = new Intent(this,SelectPicActivity.class);
+			startActivityForResult(intent, PIC_SELECTED);
+			break;
+			//TODO 添加其他按钮的点击事件响应逻辑
+		}
 	}
 
 }

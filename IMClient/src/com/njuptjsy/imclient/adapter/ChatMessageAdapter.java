@@ -1,4 +1,4 @@
-package com.njuptjsy.imclient;
+package com.njuptjsy.imclient.adapter;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.njuptjsy.imclient.R;
+import com.njuptjsy.imclient.R.id;
+import com.njuptjsy.imclient.R.layout;
 import com.njuptjsy.imclient.bean.ChatContext;
 import com.njuptjsy.imclient.bean.ChatContext.Type;
 
