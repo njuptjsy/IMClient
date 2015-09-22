@@ -42,6 +42,8 @@ public class PicDirListViewAdapter extends ArrayAdapter<FolderBean> {
 			viewHolder.mImageView = (ImageView) convertView.findViewById(R.id.id_dir_item_image);
 			viewHolder.mDirCount = (TextView) convertView.findViewById(R.id.id_dir_item_count);
 			viewHolder.mDirName = (TextView) convertView.findViewById(R.id.id_dir_item_name);
+			viewHolder.mFolderSelector = (ImageView) convertView.findViewById(R.id.id_folder_selector);
+			
 			convertView.setTag(viewHolder);
 		}else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -61,5 +63,6 @@ public class PicDirListViewAdapter extends ArrayAdapter<FolderBean> {
 		ImageView mImageView;
 		TextView mDirName;
 		TextView mDirCount;
+		ImageView mFolderSelector;
 	}
 }

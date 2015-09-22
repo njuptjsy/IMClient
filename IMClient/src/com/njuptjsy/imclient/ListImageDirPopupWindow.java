@@ -32,6 +32,7 @@ public class ListImageDirPopupWindow extends PopupWindow{
 	private List<FolderBean> mDatas;
 	private Context mContext;
 	private OnDirSelectedListener mListener;
+	private  View lastSelectedView;
 	
 	public ListImageDirPopupWindow(Context context, List<FolderBean> datas){
 		calculateWidthAndHeight(context);
@@ -70,12 +71,23 @@ public class ListImageDirPopupWindow extends PopupWindow{
 	 * 实现listView的点击事件
 	 * */
 	private void initEvent() {
+		
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				if (mListener != null) {
 					mListener.onSeleted(mDatas.get(position));
+					if (lastSelectedView != null) {
+						lastSelectedView.findViewById(R.id.id_folder_selector).setVisibility(View.GONE);
+					}
+					lastSelectedView = view;
+					if (view.findViewById(R.id.id_folder_selector).getVisibility() == View.VISIBLE) {
+						view.findViewById(R.id.id_folder_selector).setVisibility(View.GONE);
+					}else {
+						view.findViewById(R.id.id_folder_selector).setVisibility(View.VISIBLE);
+					}
+					
 				}
 			}
 		});
